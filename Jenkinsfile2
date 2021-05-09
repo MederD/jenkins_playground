@@ -6,37 +6,28 @@ environment{
     command2 = 'destroy'
 }
 
-stages {
-    stage('Init'){
-        steps{
-            sh "terraform init"
-        }
+parameters {
+        choice(name: 'Command to use', choices: "${command1}\n${command2}", description: 'What command you will use?')
+        string(name: 'tfvars', defaultValue: 'jenkins.tfvars', description: 'Which terraform command would you like to use?')
     }
-    stage('Command Input') {
-        steps {
-            script {                
-                env.COMMAND = input message: 'User input required',
-                ok: 'Enter!',
-                parameters: [choice(name: 'Command to use', choices: "${command1}\n${command2}", description: 'What command you will use?')]
+
+stages {
+        stage('Terraform Init') {
+            steps {
+                sh '''
+                   cd Infrastructure/
+                   terraform init
+
+                '''
             }
         }
-    
-        steps{
-            input {
-                message 'File name?'
-                ok  'Do it!'
-                parameters {
-                    string(name: 'FILE', defaultValue: 'jenkins.tfvars', description: 'TFVARS FILE')
-            }
-        }
-        
-        steps {
+        stage('Terraform Apply or Destroy') {
+            steps {
                 sh """
                    cd Infrastructure/
-                   terraform ${COMMAND} -var-file=${FILE} -auto-approve
+                   terraform ${params.Command} -var-file=${params.tfvars}.tfvars -auto-approve
                 """
             }
         }
-     }
-   }
+    }
 }
