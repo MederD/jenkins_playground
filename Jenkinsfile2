@@ -1,13 +1,8 @@
 pipeline {
 agent any
 
-environment{
-    command1 = 'apply'
-    command2 = 'destroy'
-}
-
 parameters {
-        choice(name: 'Command to use', choices: "${command1}\n${command2}", description: 'What command you will use?')
+        choice(name: 'Command to use', choices: "apply\ndestroy", description: 'What command you will use?')
         string(name: 'tfvars', defaultValue: 'jenkins.tfvars', description: 'Which terraform command would you like to use?')
     }
 
