@@ -1,7 +1,4 @@
 pipeline {
-    parameters {
-        string(name: 'INIT', defaultValue: 'init', description: 'teraform init?')
-    }
     agent any
     environment {
         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
@@ -9,14 +6,20 @@ pipeline {
     }
 
     stages {
-        stage('Init') {
+        stage('Release scope') {
             steps {
-                sh "cd Infrastructure/ && terraform ${ params.INIT }"
-            }
-        }
-        stage('Apply') {
-            steps {
-                sh "cd Infrastructure/ && terraform ${ params.INIT }"
+                script {
+                    // Prepare a list and write to file
+                    sh "echo \"init\napply\ndestroy\" > ${WORKSPACE}/list"
+
+                    // Load the list into a variable
+                    env.LIST = readFile (file: "${WORKSPACE}/list")
+
+                    // Show the select input
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: env.LIST, description: 'What is the release scope?')]
+                }
+                sh "cd Infrastructure/ && terraform ${env.RELEASE_SCOPE}"
             }
         }
     }
