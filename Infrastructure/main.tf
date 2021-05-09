@@ -15,7 +15,7 @@ data "aws_ami" "ubuntu" {
 }
 
 provider "aws" {
-  region = var.region
+  region = "us-east-1"
 }
 
 resource "aws_instance" "web" {
@@ -23,6 +23,6 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
 
   tags = {
-    Name = "HelloWorld"
+    Name = "${var.prefix}-Test"
   }
 }
