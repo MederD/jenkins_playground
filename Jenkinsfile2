@@ -20,7 +20,7 @@ stages {
             steps {
                 sh """
                    cd Infrastructure/
-                   terraform ${params.Command} -var-file=${params.tfvars}.tfvars -auto-approve
+                   terraform ${params.Command} -var-file=${params.tfvars} -auto-approve
                 """
             }
         }
