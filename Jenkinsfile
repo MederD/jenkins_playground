@@ -1,8 +1,7 @@
 pipeline {
     parameters {
-        choice(name: 'CHOICE', choices: ['init', 'apply', 'destroy'], description: 'Choose one')
+        string(name: 'INIT', defaultValue: 'init', description: 'teraform init?')
     }
-
     agent any
     environment {
         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
@@ -10,9 +9,14 @@ pipeline {
     }
 
     stages {
-        stage('Example') {
+        stage('Init') {
             steps {
-                sh "cd Infrastructure/ && terraform ${ params.CHOICE }"
+                sh "cd Infrastructure/ && terraform ${ params.INIT }"
+            }
+        }
+        stage('Apply') {
+            steps {
+                sh "cd Infrastructure/ && terraform ${ params.INIT }"
             }
         }
     }
