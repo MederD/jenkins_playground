@@ -1,0 +1,42 @@
+pipeline {
+agent any
+
+environment{
+    command1 = 'apply'
+    command2 = 'destroy'
+}
+
+stages {
+    stage('Init'){
+        steps{
+            sh "terraform init"
+        }
+    }
+    stage('Stage-One') {
+        steps {
+            script {                
+                env.COMMAND = input message: 'User input required',
+                ok: 'Enter!',
+                parameters: [choice(name: 'Command to use', choices: "${command1}\n${command2}", description: 'What command you will use?')]
+            }
+        }
+    
+        steps{
+            input {
+                message 'File name?'
+                ok  'Do it!'
+                parameters {
+                    string(name: 'FILE', defaultValue: 'jenkins.tfvars', description: 'TFVARS FILE')
+            }
+        }
+        
+        steps {
+                sh """
+                   cd Infrastructure/
+                   terraform ${COMMAND} -var-file=${FILE} -auto-approve
+                """
+            }
+        }
+     }
+   }
+}
