@@ -19,11 +19,6 @@ pipeline {
                 ok  'Do it!'
                 parameters {
                     string(name: 'TARGET_ENVIRONMENT', defaultValue: 'apply', description: 'Target Deployment Environment')
-                }
-
-                message 'File name?'
-                ok  'Do it!'
-                parameters {
                     string(name: 'FILE', defaultValue: 'jenkins.tfvars', description: 'Target Deployment Environment')
                 }
             }
