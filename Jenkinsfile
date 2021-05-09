@@ -8,17 +8,9 @@ pipeline {
         choice(name: 'CHOICE', choices: ['init', 'apply', 'destroy'], description: 'Choose one')
     }
     stages {
-        stage('Build') {
+        stage('Example') {
             steps {
-                script {
-                    if (${params.CHOICE} == 'init') {
-                        sh 'cd Infrastructure/ && terraform init'
-                    } if (${params.CHOICE} == 'apply') {
-                        sh 'cd Infrastructure/ && terraform apply -auto-approve'
-                    } else {
-                        sh 'cd Infrastructure/ && terraform destroy -auto-approve'
-                    }
-                }
+                sh 'cd Infrastructure/ && terraform' ${ params.CHOICE }
             }
         }
     }
