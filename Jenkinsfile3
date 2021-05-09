@@ -20,14 +20,14 @@ pipeline {
                 parameters {
                     string(name: 'TARGET_ENVIRONMENT', defaultValue: 'apply', description: 'Target Deployment Environment')
                 }
-            }
-            input {
+
                 message 'File name?'
                 ok  'Do it!'
                 parameters {
                     string(name: 'FILE', defaultValue: 'jenkins.tfvars', description: 'Target Deployment Environment')
                 }
             }
+        
             steps {
                 sh """
                    cd Infrastructure/
