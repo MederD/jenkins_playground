@@ -16,8 +16,8 @@ pipeline {
                     env.LIST = readFile (file: "${WORKSPACE}/list")
 
                     // Show the select input
-                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
-                            parameters: [choice(name: 'RELEASE_SCOPE', choices: env.LIST, description: 'What is the release scope?')]
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Enter!',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: env.LIST, description: 'What is the stage?')]
                 }
                 sh "cd Infrastructure/ && terraform ${env.RELEASE_SCOPE}"
             }
@@ -32,10 +32,10 @@ pipeline {
                     env.LIST = readFile (file: "${WORKSPACE}/list")
 
                     // Show the select input
-                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
-                            parameters: [choice(name: 'RELEASE_SCOPE', choices: env.LIST, description: 'What is the release scope?')]
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Enter!',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: env.LIST, description: 'What is the stage?')]
                 }
-                sh "cd Infrastructure/ && terraform ${env.RELEASE_SCOPE}"
+                sh "cd Infrastructure/ && terraform ${env.RELEASE_SCOPE} -auto-approve"
             }
         }
     }
