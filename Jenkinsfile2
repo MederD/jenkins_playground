@@ -12,7 +12,7 @@ stages {
             sh "terraform init"
         }
     }
-    stage('Stage-One') {
+    stage('Command Input') {
         steps {
             script {                
                 env.COMMAND = input message: 'User input required',
